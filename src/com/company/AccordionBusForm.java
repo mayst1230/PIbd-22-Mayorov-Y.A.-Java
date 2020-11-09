@@ -5,13 +5,15 @@ import java.awt.*;
 
 public class AccordionBusForm {
 
-    private JButton create_button;
+    private JButton createBusButton;
+    private JButton createAccordionBusButton;
     private JButton up_button;
     private JButton left_button;
     private JButton right_button;
     private JButton down_button;
-    private JComboBox<String> choise_button;
-    private AccordionBus accordionBus;
+    private JComboBox<String> choiceAddingButton;
+    private JComboBox<String> choiceButtonDoors;
+    private Transport transport;
     private JFrame frame;
     private DrawBus draw;
 
@@ -19,16 +21,16 @@ public class AccordionBusForm {
         String temp = button.getName();
         switch (temp) {
             case "Up" -> {
-                accordionBus.MoveTrans(Direction.Up);
+                transport.moveTransport(Direction.Up);
             }
             case "Down" -> {
-                accordionBus.MoveTrans(Direction.Down);
+                transport.moveTransport(Direction.Down);
             }
             case "Left" -> {
-                accordionBus.MoveTrans(Direction.Left);
+                transport.moveTransport(Direction.Left);
             }
             case "Right" -> {
-                accordionBus.MoveTrans(Direction.Right);
+                transport.moveTransport(Direction.Right);
             }
         }
         frame.repaint();
@@ -72,36 +74,56 @@ public class AccordionBusForm {
         right_button.setEnabled(false);
         left_button.setEnabled(false);
 
-        create_button = new JButton("Создать");
-        create_button.setBounds(0, 0, 90, 30);
-        create_button.addActionListener(e -> {
-            accordionBus = new AccordionBus(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN, Color.GRAY, true, true, true, choise_button.getSelectedIndex() + 3);
-            accordionBus.SetPosition(30 + ((int) (Math.random() * 100)), 30 + ((int) (Math.random() * 100)), 900, 500);
+        createBusButton = new JButton("Bus");
+        createBusButton.setBounds(0, 0, 130, 30);
+        createBusButton.addActionListener(e -> {
+            transport = new BusVehicle(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN);
+            transport.setPosition(30 + ((int) (Math.random() * 100)), 30 + ((int) (Math.random() * 100)), 900, 500);
             up_button.setEnabled(true);
             down_button.setEnabled(true);
             right_button.setEnabled(true);
             left_button.setEnabled(true);
-            draw.setAccordionBus(accordionBus);
+            draw.setTransport(transport);
             frame.repaint();
         });
-        choise_button = new JComboBox<>(new String[]{"3", "4", "5"});
-        choise_button.setBounds(0, 40, 90, 30);
+
+        createAccordionBusButton = new JButton("AccBus");
+        createAccordionBusButton.setBounds(150, 0, 130, 30);
+        createAccordionBusButton.addActionListener(e -> {
+            transport = new AccordionBus(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN, Color.GRAY,
+                    true, true, true, choiceAddingButton.getSelectedIndex(), choiceButtonDoors.getSelectedIndex());
+            transport.setPosition(10 + ((int) (Math.random() * 100)), 10 + ((int) (Math.random() * 100)), 900, 500);
+            up_button.setEnabled(true);
+            down_button.setEnabled(true);
+            right_button.setEnabled(true);
+            left_button.setEnabled(true);
+            draw.setTransport(transport);
+            frame.repaint();
+        });
+
+        choiceButtonDoors = new JComboBox<>(new String[]{"3", "4", "5"});
+        choiceButtonDoors.setBounds(0, 40, 130, 30);
+
+        choiceAddingButton = new JComboBox<>(new String[]{"Квадратные", "Круглые", "Овальные"});
+        choiceAddingButton.setBounds(150, 40, 130, 30);
     }
 
     public AccordionBusForm() {
         draw = new DrawBus();
-        frame = new JFrame("Bus");
+        frame = new JFrame("Автобус");
         frame.setSize(900, 500);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
         initialization();
-        frame.getContentPane().add(create_button);
+        frame.getContentPane().add(createBusButton);
+        frame.getContentPane().add(createAccordionBusButton);
         frame.getContentPane().add(up_button);
         frame.getContentPane().add(down_button);
         frame.getContentPane().add(left_button);
         frame.getContentPane().add(right_button);
-        frame.getContentPane().add(choise_button);
+        frame.getContentPane().add(choiceButtonDoors);
+        frame.getContentPane().add(choiceAddingButton);
         frame.getContentPane().add(draw);
         draw.setBounds(0, 0, 900, 500);
         frame.repaint();

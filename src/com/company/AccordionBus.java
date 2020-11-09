@@ -2,25 +2,15 @@ package com.company;
 
 import java.awt.*;
 
-public class AccordionBus {
 
-    private int startPosX;
-    private int startPosY;
-    private int pictureWidth;
-    private int pictureHeight;
-    private final int accordionBusWidth = 300;
-    private final int accordionBusHeight = 100;
-    private final double changeWidth = 1.2;
-    private final double changeHeight = 1;
-    public int MaxSpeed;
-    public float Weight;
-    public Color MainColor;
+public class AccordionBus extends BusVehicle {
+
     public Color OtherColor;
     public boolean Windows;
     public boolean Accordion;
     public boolean Doors;
     public boolean Wheels;
-    private DopClass bus;
+    private Adding adding;
 
     public float getStartPosX() {
         return startPosX;
@@ -28,38 +18,6 @@ public class AccordionBus {
 
     private void setStartPosX(int startPosX) {
         this.startPosX = startPosX;
-    }
-
-    public int getMaxSpeed() {
-        return MaxSpeed;
-    }
-
-    private void setMaxSpeed(int maxSpeed) {
-        MaxSpeed = maxSpeed;
-    }
-
-    public float getWeight() {
-        return Weight;
-    }
-
-    private void setWeight(float weight) {
-        Weight = weight;
-    }
-
-    public Color getMainColor() {
-        return MainColor;
-    }
-
-    private void setMainColor(Color mainColor) {
-        MainColor = mainColor;
-    }
-
-    public Color getOtherColor() {
-        return OtherColor;
-    }
-
-    public void setOtherColor(Color otherColor) {
-        OtherColor = otherColor;
     }
 
     public boolean isWindows() {
@@ -94,53 +52,31 @@ public class AccordionBus {
         Accordion = accordion;
     }
 
-    public AccordionBus(int maxSpeed, float weight, Color mainColor, Color otherColor, boolean windows, boolean wheels, boolean accordion, int countDoors) {
-        MaxSpeed = maxSpeed;
-        Weight = weight;
-        MainColor = mainColor;
-        OtherColor = otherColor;
-        Windows = windows;
-        Wheels = wheels;
-        Accordion = accordion;
-        bus = new DopClass();
-        bus.setNumber(countDoors);
-    }
-
-    public void SetPosition(int x, int y, int width, int height) {
-        startPosX = x;
-        startPosY = y;
-        pictureWidth = width;
-        pictureHeight = height;
-    }
-
-    public void MoveTrans(Direction dir) {
-        float step = MaxSpeed * 300 / Weight;
-        switch (dir) {
-            case Right:
-                if (startPosX + step < pictureWidth - accordionBusWidth * changeWidth) {
-                    startPosX += step;
-                }
+    public AccordionBus(int maxSpeed, float weight, Color mainColor, Color otherColor, boolean windows, boolean wheels, boolean accordion, int add, int numbers) {
+        super(maxSpeed, weight, mainColor, 100, 100);
+        this.maxSpeed = maxSpeed;
+        this.weight = weight;
+        this.mainColor = mainColor;
+        this.OtherColor = otherColor;
+        this.Windows = windows;
+        this.Wheels = wheels;
+        this.Accordion = accordion;
+        switch (add) {
+            case 0:
+                adding = new RectangleDoors(numbers);
                 break;
-            case Left:
-                if (startPosX - step > 0) {
-                    startPosX -= step;
-                }
+            case 1:
+                adding = new CircleDoors(numbers);
                 break;
-            case Up:
-                if (startPosY - step > 0) {
-                    startPosY -= step;
-                }
-                break;
-            case Down:
-                if (startPosY + step < pictureHeight - accordionBusHeight * changeHeight) {
-                    startPosY += step;
-                }
+            case 2:
+                adding = new OvalDoors(numbers);
                 break;
         }
     }
 
-    public void DrawBus(Graphics g) {
-        g.setColor(MainColor);
+    public void draw(Graphics g) {
+
+        g.setColor(mainColor);
         g.fillRect(startPosX + 190, startPosY - 1, 130, 42);
         g.setColor(Color.BLACK);
         g.drawRect(startPosX + 190, startPosY - 1, 130, 42);
@@ -177,36 +113,8 @@ public class AccordionBus {
             //заднее колесо
             g.setColor(Color.BLACK);
             g.fillOval(startPosX + 270, startPosY + 30, 20, 20);
-
         }
-        //передний корпус
-        g.setColor(MainColor);
-        g.fillRect(startPosX, startPosY - 1, 160, 42);
-        g.setColor(Color.BLACK);
-        g.drawRect(startPosX, startPosY - 1, 160, 42);
-
-        //водительское окно
-        g.setColor(Color.blue);
-        g.fillRect(startPosX, startPosY - 1, 10, 25);
-        g.setColor(Color.BLACK);
-        g.drawRect(startPosX, startPosY - 1, 10, 25);
-
-        //передние окна
-        g.setColor(Color.CYAN);
-        g.fillRect(startPosX + 35, startPosY + 5, 40, 20);
-        g.fillRect(startPosX + 105, startPosY + 5, 40, 20);
-        g.setColor(Color.BLACK);
-        g.drawRect(startPosX + 35, startPosY + 5, 40, 20);
-        g.drawRect(startPosX + 105, startPosY + 5, 40, 20);
-
-        //передние колеса
-        g.setColor(Color.BLACK);
-        g.fillOval(startPosX + 35, startPosY + 30, 20, 20);
-        g.fillOval(startPosX + 125, startPosY + 30, 20, 20);
-
-        g.drawOval(startPosX + 35, startPosY + 30, 20, 20);
-        g.drawOval(startPosX + 125, startPosY + 30, 20, 20);
-
-        bus.DrawBus(g, startPosX, startPosY);
+        super.draw(g);
+        adding.draw(g, startPosX, startPosY);
     }
 }

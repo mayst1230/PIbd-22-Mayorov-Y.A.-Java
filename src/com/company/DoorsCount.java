@@ -8,15 +8,12 @@ public enum DoorsCount {
 
     public static DoorsCount getCount(int count) {
         switch (count) {
-            case 3 -> {
+            case 0:
                 return three;
-            }
-            case 4 -> {
+            case 1:
                 return four;
-            }
-            case 5 -> {
+            case 2:
                 return five;
-            }
         }
         return null;
     }

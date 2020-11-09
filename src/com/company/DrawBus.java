@@ -5,15 +5,19 @@ import java.awt.*;
 
 public class DrawBus extends JPanel {
 
-    private AccordionBus accordionBus;
+    private Transport transport;
 
     public void paintComponent(Graphics g) {
-        if (accordionBus != null) {
-            accordionBus.DrawBus(g);
+        if (transport != null) {
+            transport.draw(g);
         }
     }
 
-    public void setAccordionBus(AccordionBus ex) {
-        this.accordionBus = ex;
+    public void setTransport(Transport transport) {
+        this.transport = transport;
+    }
+
+    public Transport getAccordionBus() {
+        return transport;
     }
 }
