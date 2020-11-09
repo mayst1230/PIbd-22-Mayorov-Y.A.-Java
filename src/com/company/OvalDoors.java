@@ -3,6 +3,7 @@ package com.company;
 import java.awt.*;
 
 public class OvalDoors implements Adding {
+
     private DoorsCount count;
 
     public OvalDoors(int number) {

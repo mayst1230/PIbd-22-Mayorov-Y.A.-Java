@@ -69,20 +69,11 @@ public class AccordionBusForm {
             direction(left_button);
         });
 
-        up_button.setEnabled(false);
-        down_button.setEnabled(false);
-        right_button.setEnabled(false);
-        left_button.setEnabled(false);
-
         createBusButton = new JButton("Bus");
         createBusButton.setBounds(0, 0, 130, 30);
         createBusButton.addActionListener(e -> {
             transport = new BusVehicle(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN);
             transport.setPosition(30 + ((int) (Math.random() * 100)), 30 + ((int) (Math.random() * 100)), 900, 500);
-            up_button.setEnabled(true);
-            down_button.setEnabled(true);
-            right_button.setEnabled(true);
-            left_button.setEnabled(true);
             draw.setTransport(transport);
             frame.repaint();
         });
@@ -93,10 +84,6 @@ public class AccordionBusForm {
             transport = new AccordionBus(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN, Color.GRAY,
                     true, true, true, choiceAddingButton.getSelectedIndex(), choiceButtonDoors.getSelectedIndex());
             transport.setPosition(10 + ((int) (Math.random() * 100)), 10 + ((int) (Math.random() * 100)), 900, 500);
-            up_button.setEnabled(true);
-            down_button.setEnabled(true);
-            right_button.setEnabled(true);
-            left_button.setEnabled(true);
             draw.setTransport(transport);
             frame.repaint();
         });
@@ -112,7 +99,6 @@ public class AccordionBusForm {
         draw = new DrawBus();
         frame = new JFrame("Автобус");
         frame.setSize(900, 500);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setResizable(false);
         initialization();
@@ -126,6 +112,12 @@ public class AccordionBusForm {
         frame.getContentPane().add(choiceAddingButton);
         frame.getContentPane().add(draw);
         draw.setBounds(0, 0, 900, 500);
+        frame.repaint();
+    }
+
+    public void setBus(Transport transport) {
+        this.transport = transport;
+        draw.setTransport(transport);
         frame.repaint();
     }
 }
