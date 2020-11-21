@@ -1,7 +1,6 @@
 package com.company;
 
 public enum DoorsCount {
-
     three,
     four,
     five;

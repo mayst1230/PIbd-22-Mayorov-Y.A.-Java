@@ -2,8 +2,7 @@ package com.company;
 
 import java.awt.*;
 
-public class RectangleDoors implements Adding {
-
+public class RectangleDoors implements Adding{
     private DoorsCount count;
 
     public RectangleDoors(int number) {

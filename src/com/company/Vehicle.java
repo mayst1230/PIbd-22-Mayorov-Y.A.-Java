@@ -3,7 +3,6 @@ package com.company;
 import java.awt.*;
 
 public abstract class Vehicle implements Transport {
-
     protected int startPosX;
 
     protected int startPosY;

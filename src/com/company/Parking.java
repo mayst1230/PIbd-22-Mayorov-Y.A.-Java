@@ -1,12 +1,16 @@
 package com.company;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Parking<T extends Transport, G extends Adding> {
 
-    private final Object[] places;
+    private final List<T> places;
 
     private final int pictureWidth;
+
+    private final int maxCount;
 
     private final int pictureHeight;
 
@@ -17,37 +21,27 @@ public class Parking<T extends Transport, G extends Adding> {
     public Parking(int picWidth, int picHeight) {
         int width = picWidth / placeSizeWidth;
         int height = picHeight / placeSizeHeight;
-        this.places = new Object[width * height];
-        this.pictureWidth = picWidth;
-        this.pictureHeight = picHeight;
+        maxCount = width * height;
+        pictureWidth = picWidth;
+        pictureHeight = picHeight;
+        places = new ArrayList<>();
     }
 
     public boolean add(T vehicle) {
-        for (int i = 0; i < places.length; i++) {
-            if (CheckFreePlace(i)) {
-                vehicle.setPosition(5 + i / 5 * placeSizeWidth + 5, i % 5 *
-                        placeSizeHeight + 15, pictureWidth, pictureHeight);
-                places[i] = vehicle;
-                return true;
-            }
+        if (places.size() < maxCount) {
+            places.add(vehicle);
+            return true;
         }
         return false;
     }
 
     public T delete(int index) {
-        if (index < 0 || index > places.length) {
-            return null;
-        }
-        if (!CheckFreePlace(index)) {
-            T vehicle = (T) places[index];
-            places[index] = null;
-            return vehicle;
+        if (index >= 0 && index < maxCount && places.get(index) != null) {
+            T bus = places.get(index);
+            places.remove(index);
+            return bus;
         }
         return null;
-    }
-
-    private boolean CheckFreePlace(int indexPlace) {
-        return places[indexPlace] == null;
     }
 
     public boolean equal(int count) {
@@ -66,11 +60,10 @@ public class Parking<T extends Transport, G extends Adding> {
 
     public void draw(Graphics g) {
         drawMarking(g);
-        for (Object place : places) {
-            if (place != null) {
-                T placeT = (T) place;
-                placeT.draw(g);
-            }
+        for (int i = 0; i < places.size(); i++) {
+            places.get(i).setPosition(5 + i / 5 * placeSizeWidth + 10, i % 5 *
+                    placeSizeHeight + 15, pictureWidth, pictureHeight);
+            places.get(i).draw(g);
         }
     }
 
@@ -83,7 +76,14 @@ public class Parking<T extends Transport, G extends Adding> {
             }
             g.drawLine(i * placeSizeWidth + change, 0, i * placeSizeWidth + change,
                     (pictureHeight / placeSizeHeight) * placeSizeHeight);
-            change += 5;
+            change += 10;
         }
+    }
+
+    public T get(int index) {
+        if (index > -1 && index < places.size()) {
+            return places.get(index);
+        }
+        return null;
     }
 }

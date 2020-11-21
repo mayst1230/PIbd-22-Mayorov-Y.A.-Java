@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AccordionBusForm {
-
     private JButton createBusButton;
     private JButton createAccordionBusButton;
     private JButton up_button;

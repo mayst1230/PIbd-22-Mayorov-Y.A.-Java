@@ -5,19 +5,22 @@ import java.awt.*;
 
 public class DrawParking extends JPanel {
 
-    private final Parking<BusVehicle, Adding> busVehicleParking;
+    private final ParkingCollection parkingCollection;
+    private String selectedItem = null;
 
-    public DrawParking(Parking<BusVehicle, Adding> busVehicleParking) {
-        this.busVehicleParking = busVehicleParking;
+    public DrawParking(ParkingCollection parkingCollection) {
+        this.parkingCollection = parkingCollection;
     }
 
     protected void paintComponent(Graphics g) {
-        if (busVehicleParking != null) {
-            busVehicleParking.draw(g);
+        if (selectedItem != null) {
+            if (parkingCollection != null) {
+                parkingCollection.get(selectedItem).draw(g);
+            }
         }
     }
 
-    public Parking<BusVehicle, Adding> getBusVehicleParking() {
-        return busVehicleParking;
+    public void setSelectedItem(String selectedItem) {
+        this.selectedItem = selectedItem;
     }
 }

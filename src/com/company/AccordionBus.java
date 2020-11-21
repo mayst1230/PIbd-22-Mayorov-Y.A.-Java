@@ -63,7 +63,7 @@ public class AccordionBus extends BusVehicle {
         this.Accordion = accordion;
         switch (add) {
             case 0:
-                adding = new DopClass(numbers);
+                adding = new RectangleDoors(numbers);
                 break;
             case 1:
                 adding = new CircleDoors(numbers);
