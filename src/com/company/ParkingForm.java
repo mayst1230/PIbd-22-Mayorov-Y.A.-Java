@@ -2,6 +2,7 @@ package com.company;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,6 +27,13 @@ public class ParkingForm {
     private DefaultListModel<String> parkingList;
     private List<BusVehicle> listTransport;
     private ParkingCollection parkingCollection;
+    private JMenuBar menuBar;
+    private JMenu fileMenu;
+    private JMenu parkingFileMenu;
+    private JMenuItem saveFile;
+    private JMenuItem loadFile;
+    private JMenuItem saveParking;
+    private JMenuItem loadParking;
 
     public ParkingForm() {
         initialization();
@@ -39,6 +47,7 @@ public class ParkingForm {
         frame.getContentPane().add(groupBoxTake);
         frame.getContentPane().add(drawParkings);
         frame.getContentPane().add(parkingsGroupBox);
+        frame.setJMenuBar(menuBar);
         frame.repaint();
     }
 
@@ -104,14 +113,41 @@ public class ParkingForm {
         parkingsGroupBox.add(deleteParking);
         placeCountText.setBounds(40, 20, 60, 30);
         countPlaceTransport.setBounds(85, 20, 30, 30);
+
+        //TODO: МЕНЮ ФАЙЛ
+        menuBar = new JMenuBar();
+        fileMenu = new JMenu("Файл");
+        saveFile = new JMenuItem("Сохранить");
+        saveFile.addActionListener(e -> {
+            saveFile();
+        });
+        loadFile = new JMenuItem("Загрузить");
+        loadFile.addActionListener(e -> {
+            loadFile();
+        });
+        parkingFileMenu = new JMenu("Парковка");
+        saveParking = new JMenuItem("Сохранить");
+        saveParking.addActionListener(e -> {
+            saveParking();
+        });
+        loadParking = new JMenuItem("Загрузить");
+        loadParking.addActionListener(e -> {
+            loadParking();
+        });
+        fileMenu.add(saveFile);
+        fileMenu.add(loadFile);
+        parkingFileMenu.add(saveParking);
+        parkingFileMenu.add(loadParking);
+        menuBar.add(fileMenu);
+        menuBar.add(parkingFileMenu);
     }
 
     private void createTransport() {
         if (listBoxParkings.getSelectedIndex() >= 0) {
             TransportConfigPanel configPanel = new TransportConfigPanel(frame);
-            Transport transport = configPanel.getTransport();
-            if (transport != null) {
-                if (parkingCollection.get(listBoxParkings.getSelectedValue()).add(transport)) {
+            Transport bus = configPanel.getTransport();
+            if (bus != null) {
+                if (parkingCollection.get(listBoxParkings.getSelectedValue()).add(bus)) {
                     frame.repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Парковка переполнена");
@@ -193,6 +229,66 @@ public class ParkingForm {
             accordionBusFormForm.setBus(listTransport.get(0));
             listTransport.remove(0);
             frame.repaint();
+        }
+    }
+
+    private void saveFile() {
+        JFileChooser fileSaveDialog = new JFileChooser();
+        fileSaveDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileSaveDialog.showSaveDialog(frame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (parkingCollection.saveData(fileSaveDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(frame, "Файл успешно сохранен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Файл не сохранен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void loadFile() {
+        JFileChooser fileOpenDialog = new JFileChooser();
+        fileOpenDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileOpenDialog.showOpenDialog(frame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (parkingCollection.loadData(fileOpenDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(frame, "Файл успешно загружен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                reloadLevels();
+                frame.repaint();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Файл не загружен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void saveParking() {
+        JFileChooser fileSaveDialog = new JFileChooser();
+        fileSaveDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        if (listBoxParkings.getSelectedValue() == null) {
+            JOptionPane.showMessageDialog(frame, "Выберите парковку", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        int result = fileSaveDialog.showSaveDialog(frame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (parkingCollection.saveParking(fileSaveDialog.getSelectedFile().getPath(), listBoxParkings.getSelectedValue())) {
+                JOptionPane.showMessageDialog(frame, "Файл успешно сохранен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Файл не сохранен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void loadParking() {
+        JFileChooser fileOpenDialog = new JFileChooser();
+        fileOpenDialog.setFileFilter(new FileNameExtensionFilter("Текстовый файл", "txt"));
+        int result = fileOpenDialog.showOpenDialog(frame);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (parkingCollection.loadParking(fileOpenDialog.getSelectedFile().getPath())) {
+                JOptionPane.showMessageDialog(frame, "Файл успешно загружен", "Результат", JOptionPane.INFORMATION_MESSAGE);
+                reloadLevels();
+                frame.repaint();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Файл не загружен", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 }

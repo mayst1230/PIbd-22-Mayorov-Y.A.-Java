@@ -37,4 +37,9 @@ public class CircleDoors implements Adding {
             g.drawRect(startPosX + 308, startPosY + 20, 2, 20);
         }
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + '.' + count.ordinal();
+    }
 }

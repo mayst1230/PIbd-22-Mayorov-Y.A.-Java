@@ -36,4 +36,9 @@ public class OvalDoors implements Adding {
             g.drawRect(startPosX + 308, startPosY + 10, 2, 30);
         }
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + '.' + count.ordinal();
+    }
 }

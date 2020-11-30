@@ -86,4 +86,8 @@ public class Parking<T extends Transport, G extends Adding> {
         }
         return null;
     }
+
+    public void clear() {
+        places.clear();
+    }
 }

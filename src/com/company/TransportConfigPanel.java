@@ -6,7 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class TransportConfigPanel extends JDialog {
-    private Vehicle transport;
+    private BusVehicle transport;
     private Color busColor;
     private Adding transportAdding;
     private DrawBus drawBus;
@@ -51,7 +51,7 @@ public class TransportConfigPanel extends JDialog {
                 switch (label.getText()) {
                     case "Bus" -> transport = new BusVehicle((int) spinnerMaxSpeed.getValue(), (int) spinnerWeight.getValue(), Color.WHITE);
                     case "AccBus" -> transport = new AccordionBus((int) spinnerMaxSpeed.getValue(), (int) spinnerWeight.getValue(), Color.WHITE, Color.WHITE,
-                            checkBoxWindows.isSelected(), checkBoxWheels.isSelected(), checkBoxAccordion.isSelected(), -1, -1);
+                            checkBoxWindows.isSelected(), checkBoxWheels.isSelected(), checkBoxAccordion.isSelected());
                 }
             }
 

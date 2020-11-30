@@ -8,6 +8,7 @@ public class BusVehicle extends Vehicle {
     protected int busVehicleHeight = 100;
     protected double changeWidth = 3.1;
     protected double changeHeight = 2.1;
+    protected String separator = ";";
 
     public BusVehicle(int maxSpeed, float weight, Color mainColor) {
         this.maxSpeed = maxSpeed;
@@ -21,6 +22,15 @@ public class BusVehicle extends Vehicle {
         this.mainColor = mainColor;
         this.busVehicleWidth = busWidth;
         this.busVehicleHeight = busHeight;
+    }
+
+    public BusVehicle(String info) {
+        String[] strs = info.split(separator);
+        if (strs.length == 3) {
+            maxSpeed = Integer.parseInt(strs[0]);
+            weight = Float.parseFloat(strs[1]);
+            mainColor = Color.decode(strs[2]);
+        }
     }
 
     @Override
@@ -91,5 +101,10 @@ public class BusVehicle extends Vehicle {
                 }
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return maxSpeed + separator + weight + separator + mainColor.getRGB();
     }
 }

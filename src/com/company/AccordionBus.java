@@ -64,7 +64,7 @@ public class AccordionBus extends BusVehicle {
         this.OtherColor = otherColor;
     }
 
-    public AccordionBus(int maxSpeed, float weight, Color mainColor, Color otherColor, boolean windows, boolean wheels, boolean accordion, int add, int numbers) {
+    public AccordionBus(int maxSpeed, float weight, Color mainColor, Color otherColor, boolean windows, boolean wheels, boolean accordion) {
         super(maxSpeed, weight, mainColor, 100, 100);
         this.maxSpeed = maxSpeed;
         this.weight = weight;
@@ -73,16 +73,30 @@ public class AccordionBus extends BusVehicle {
         this.Windows = windows;
         this.Wheels = wheels;
         this.Accordion = accordion;
-        switch (add) {
-            case 0:
-                adding = new RectangleDoors(numbers);
-                break;
-            case 1:
-                adding = new CircleDoors(numbers);
-                break;
-            case 2:
-                adding = new OvalDoors(numbers);
-                break;
+    }
+
+    public AccordionBus(String info) {
+        super("");
+        String[] string = info.split(separator);
+        if (string.length == 8) {
+            maxSpeed = Integer.parseInt(string[0]);
+            weight = Float.parseFloat(string[1]);
+            mainColor = Color.decode(string[2]);
+            OtherColor = Color.decode(string[3]);
+            Windows = Boolean.parseBoolean(string[4]);
+            Wheels = Boolean.parseBoolean(string[5]);
+            Accordion = Boolean.parseBoolean(string[6]);
+            if (string[7].contains("null")) {
+                adding = null;
+            } else {
+                String[] argsAddition = string[7].split("\\.");
+                int number = Integer.parseInt(argsAddition[1]);
+                switch (argsAddition[0]) {
+                    case "RectangleDoors" -> adding = new RectangleDoors(number);
+                    case "CircleDoors" -> adding = new CircleDoors(number);
+                    case "OvalDoors" -> adding = new OvalDoors(number);
+                }
+            }
         }
     }
 
@@ -130,5 +144,11 @@ public class AccordionBus extends BusVehicle {
         if (adding != null) {
             adding.draw(g, startPosX, startPosY);
         }
+    }
+
+    @Override
+    public String toString() {
+        return maxSpeed + separator + weight + separator + mainColor.getRGB() + separator + OtherColor.getRGB() + separator
+                + Windows + separator + Wheels + separator + Accordion + separator + adding;
     }
 }
