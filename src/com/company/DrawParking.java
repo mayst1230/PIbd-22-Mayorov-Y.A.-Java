@@ -12,6 +12,7 @@ public class DrawParking extends JPanel {
         this.parkingCollection = parkingCollection;
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         if (selectedItem != null) {
             if (parkingCollection != null) {

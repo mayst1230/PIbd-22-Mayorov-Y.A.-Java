@@ -7,27 +7,21 @@ import java.util.List;
 
 public class ParkingForm {
     private JFrame frame;
-    private JButton parkBus;
-    private JButton parkAccordionBus;
+    private JButton parkTransport;
     private JButton takeTransport;
-    private JButton compareEquality;
-    private JButton compareInequality;
     private JButton addParking;
     private JButton deleteParking;
     private JButton putTransportIntoList;
     private JTextField placeTransport;
     private JTextField countPlaceTransport;
-    private Parking<BusVehicle, Adding> parking;
     private DrawParking drawParkings;
     private JPanel groupBoxTake;
-    private JPanel equateGroupBox;
     private JPanel parkingsGroupBox;
     private JLabel placeText;
     private JLabel placeCountText;
     private JTextField parkingField;
     private JList<String> listBoxParkings;
     private Border borderTake;
-    private Border borderCompare;
     private Border borderParkings;
     private DefaultListModel<String> parkingList;
     private List<BusVehicle> listTransport;
@@ -41,8 +35,7 @@ public class ParkingForm {
         frame.setVisible(true);
         frame.setResizable(false);
         frame.setLayout(null);
-        frame.getContentPane().add(parkBus);
-        frame.getContentPane().add(parkAccordionBus);
+        frame.getContentPane().add(parkTransport);
         frame.getContentPane().add(groupBoxTake);
         frame.getContentPane().add(drawParkings);
         frame.getContentPane().add(parkingsGroupBox);
@@ -54,12 +47,8 @@ public class ParkingForm {
         parkingCollection = new ParkingCollection(900, 450);
         drawParkings = new DrawParking(parkingCollection);
         borderTake = BorderFactory.createTitledBorder("Забрать транспорт");
-        borderCompare = BorderFactory.createTitledBorder("Сравнение");
         borderParkings = BorderFactory.createTitledBorder("Парковки");
-        parkBus = new JButton("AddBus");
-        parkAccordionBus = new JButton("AddAccBus");
-        compareEquality = new JButton("==");
-        compareInequality = new JButton("!=");
+        parkTransport = new JButton("Припарковать транспорт");
         putTransportIntoList = new JButton("Добавить в список");
         addParking = new JButton("Добавить парковку");
         deleteParking = new JButton("Удалить парковку");
@@ -71,16 +60,16 @@ public class ParkingForm {
         parkingField = new JTextField();
         parkingList = new DefaultListModel<>();
         listBoxParkings = new JList<>(parkingList);
+        parkTransport.setBounds(850, 10, 300, 90);
+        parkTransport.addActionListener(e -> {
+            createTransport();
+        });
         groupBoxTake = new JPanel();
         groupBoxTake.setLayout(null);
         groupBoxTake.add(placeText);
         groupBoxTake.add(placeTransport);
         groupBoxTake.add(takeTransport);
         groupBoxTake.add(putTransportIntoList);
-        parkBus.setBounds(850, 12, 300, 40);
-        parkBus.addActionListener(e -> createBus());
-        parkAccordionBus.setBounds(850, 60, 300, 40);
-        parkAccordionBus.addActionListener(e -> createAccordionBus());
         groupBoxTake.setBounds(880, 110, 250, 160);
         placeText.setBounds(90, 20, 60, 30);
         placeTransport.setBounds(135, 20, 30, 30);
@@ -92,14 +81,6 @@ public class ParkingForm {
         takeTransport.addActionListener(e -> takeTransportFrame());
         groupBoxTake.setBorder(borderTake);
         drawParkings.setBounds(0, 0, 900, 570);
-        equateGroupBox = new JPanel();
-        equateGroupBox.setLayout(null);
-        equateGroupBox.setBorder(borderCompare);
-        equateGroupBox.add(compareEquality);
-        equateGroupBox.add(compareInequality);
-        equateGroupBox.add(countPlaceTransport);
-        equateGroupBox.add(placeCountText);
-        equateGroupBox.setBounds(930, 300, 150, 150);
         parkingsGroupBox = new JPanel();
         parkingsGroupBox.setLayout(null);
         parkingsGroupBox.setBounds(880, 270, 250, 240);
@@ -121,47 +102,19 @@ public class ParkingForm {
         parkingsGroupBox.add(listBoxParkings);
         parkingsGroupBox.add(addParking);
         parkingsGroupBox.add(deleteParking);
-
         placeCountText.setBounds(40, 20, 60, 30);
         countPlaceTransport.setBounds(85, 20, 30, 30);
-        compareInequality.setBounds(40, 60, 90, 30);
-        compareInequality.addActionListener(e -> compare(compareInequality.getText()));
-        compareEquality.setBounds(40, 100, 90, 30);
-        compareEquality.addActionListener(e -> compare(compareEquality.getText()));
     }
 
-    private void createBus() {
+    private void createTransport() {
         if (listBoxParkings.getSelectedIndex() >= 0) {
-            JColorChooser colorDialog = new JColorChooser();
-            JOptionPane.showMessageDialog(frame, colorDialog);
-            if (colorDialog.getColor() != null) {
-                BusVehicle bus = new BusVehicle(100, 1000, colorDialog.getColor());
-                if (parkingCollection.get(listBoxParkings.getSelectedValue()).add(bus)) {
+            TransportConfigPanel configPanel = new TransportConfigPanel(frame);
+            Transport transport = configPanel.getTransport();
+            if (transport != null) {
+                if (parkingCollection.get(listBoxParkings.getSelectedValue()).add(transport)) {
                     frame.repaint();
                 } else {
                     JOptionPane.showMessageDialog(frame, "Парковка переполнена");
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(frame, "Парковка не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void createAccordionBus() {
-        if (listBoxParkings.getSelectedIndex() >= 0) {
-            JColorChooser colorDialog = new JColorChooser();
-            JOptionPane.showMessageDialog(frame, colorDialog);
-            if (colorDialog.getColor() != null) {
-                JColorChooser otherColorDialog = new JColorChooser();
-                JOptionPane.showMessageDialog(frame, otherColorDialog);
-                if (otherColorDialog.getColor() != null) {
-                    BusVehicle bus = new AccordionBus(100, 1000, colorDialog.getColor(), otherColorDialog.getColor(),
-                            true, true, true, 0, 0);
-                    if (parkingCollection.get(listBoxParkings.getSelectedValue()).add(bus)) {
-                        frame.repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Парковка переполнена");
-                    }
                 }
             }
         } else {
@@ -226,26 +179,6 @@ public class ParkingForm {
             }
         } else {
             JOptionPane.showMessageDialog(frame, "Парковка не выбрана", "Ошибка", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void compare(String comparison) {
-        int number = Integer.parseInt(countPlaceTransport.getText());
-        if (!countPlaceTransport.getText().equals("")) {
-            if (comparison.equals("==")) {
-                if (parking.equal(number)) {
-                    JOptionPane.showMessageDialog(frame, "Введенное число " + number + " = количеству занятых мест на стоянке");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Введенное число " + number + " != количеству занятых мест на стоянке");
-                }
-            }
-            if (comparison.equals("!=")) {
-                if (parking.inequal(number)) {
-                    JOptionPane.showMessageDialog(frame, "Введенное число " + number + " != количеству занятых мест на стоянке");
-                } else {
-                    JOptionPane.showMessageDialog(frame, "Введенное число " + number + " = количеству занятых мест на стоянке");
-                }
-            }
         }
     }
 

@@ -4,14 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AccordionBusForm {
-    private JButton createBusButton;
-    private JButton createAccordionBusButton;
     private JButton up_button;
     private JButton left_button;
     private JButton right_button;
     private JButton down_button;
-    private JComboBox<String> choiceAddingButton;
-    private JComboBox<String> choiceButtonDoors;
     private Transport transport;
     private JFrame frame;
     private DrawBus draw;
@@ -67,31 +63,6 @@ public class AccordionBusForm {
         left_button.addActionListener(e -> {
             direction(left_button);
         });
-
-        createBusButton = new JButton("Bus");
-        createBusButton.setBounds(0, 0, 130, 30);
-        createBusButton.addActionListener(e -> {
-            transport = new BusVehicle(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN);
-            transport.setPosition(30 + ((int) (Math.random() * 100)), 30 + ((int) (Math.random() * 100)), 900, 500);
-            draw.setTransport(transport);
-            frame.repaint();
-        });
-
-        createAccordionBusButton = new JButton("AccBus");
-        createAccordionBusButton.setBounds(150, 0, 130, 30);
-        createAccordionBusButton.addActionListener(e -> {
-            transport = new AccordionBus(100 + ((int) (Math.random() * 300)), 1000 + ((int) (Math.random() * 2000)), Color.GREEN, Color.GRAY,
-                    true, true, true, choiceAddingButton.getSelectedIndex(), choiceButtonDoors.getSelectedIndex());
-            transport.setPosition(10 + ((int) (Math.random() * 100)), 10 + ((int) (Math.random() * 100)), 900, 500);
-            draw.setTransport(transport);
-            frame.repaint();
-        });
-
-        choiceButtonDoors = new JComboBox<>(new String[]{"3", "4", "5"});
-        choiceButtonDoors.setBounds(0, 40, 130, 30);
-
-        choiceAddingButton = new JComboBox<>(new String[]{"Квадратные", "Круглые", "Овальные"});
-        choiceAddingButton.setBounds(150, 40, 130, 30);
     }
 
     public AccordionBusForm() {
@@ -101,14 +72,10 @@ public class AccordionBusForm {
         frame.setVisible(true);
         frame.setResizable(false);
         initialization();
-        frame.getContentPane().add(createBusButton);
-        frame.getContentPane().add(createAccordionBusButton);
         frame.getContentPane().add(up_button);
         frame.getContentPane().add(down_button);
         frame.getContentPane().add(left_button);
         frame.getContentPane().add(right_button);
-        frame.getContentPane().add(choiceButtonDoors);
-        frame.getContentPane().add(choiceAddingButton);
         frame.getContentPane().add(draw);
         draw.setBounds(0, 0, 900, 500);
         frame.repaint();

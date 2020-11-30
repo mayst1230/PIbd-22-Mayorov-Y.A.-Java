@@ -20,12 +20,20 @@ public class AccordionBus extends BusVehicle {
         this.startPosX = startPosX;
     }
 
+    public Adding getAdding() {
+        return adding;
+    }
+
+    public void setAdding(Adding adding) {
+        this.adding = adding;
+    }
+
     public boolean isWindows() {
         return Windows;
     }
 
     public void setWindows(boolean windows) {
-        Windows = windows;
+        this.Windows = windows;
     }
 
     public boolean isDoors() {
@@ -33,7 +41,7 @@ public class AccordionBus extends BusVehicle {
     }
 
     public void setDoors(boolean doors) {
-        Doors = doors;
+        this.Doors = doors;
     }
 
     public boolean isWheels() {
@@ -41,7 +49,7 @@ public class AccordionBus extends BusVehicle {
     }
 
     public void setWheels(boolean wheels) {
-        Wheels = wheels;
+        this.Wheels = wheels;
     }
 
     public boolean isAccordion() {
@@ -49,7 +57,11 @@ public class AccordionBus extends BusVehicle {
     }
 
     public void setAccordion(boolean accordion) {
-        Accordion = accordion;
+        this.Accordion = accordion;
+    }
+
+    public void setOtherColor(Color otherColor) {
+        this.OtherColor = otherColor;
     }
 
     public AccordionBus(int maxSpeed, float weight, Color mainColor, Color otherColor, boolean windows, boolean wheels, boolean accordion, int add, int numbers) {
@@ -115,6 +127,8 @@ public class AccordionBus extends BusVehicle {
             g.fillOval(startPosX + 270, startPosY + 30, 20, 20);
         }
         super.draw(g);
-        adding.draw(g, startPosX, startPosY);
+        if (adding != null) {
+            adding.draw(g, startPosX, startPosY);
+        }
     }
 }
