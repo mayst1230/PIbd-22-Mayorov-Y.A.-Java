@@ -121,6 +121,9 @@ public class ParkingCollection {
         if (!filename.contains(".txt")) {
             filename += ".txt";
         }
+        if (!parkingStages.containsKey(key)) {
+            return false;
+        }
         try (FileWriter fileWriter = new FileWriter(filename, false)) {
             if (parkingStages.containsKey(key))
                 fileWriter.write("Parking" + separator + key + '\n');
