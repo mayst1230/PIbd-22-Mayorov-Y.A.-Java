@@ -27,21 +27,21 @@ public class Parking<T extends Transport, G extends Adding> {
         places = new ArrayList<>();
     }
 
-    public boolean add(T vehicle) {
-        if (places.size() < maxCount) {
-            places.add(vehicle);
-            return true;
+    public boolean add(T vehicle) throws ParkingOverflowException {
+        if (places.size() >= maxCount) {
+            throw new ParkingOverflowException();
         }
-        return false;
+        places.add(vehicle);
+        return true;
     }
 
-    public T delete(int index) {
-        if (index >= 0 && index < maxCount && places.get(index) != null) {
-            T bus = places.get(index);
-            places.remove(index);
-            return bus;
+    public T delete(int index) throws ParkingNotFoundException {
+        if (index < 0 || index >= places.size()) {
+            throw new ParkingNotFoundException(index);
         }
-        return null;
+        T bus = places.get(index);
+        places.remove(index);
+        return bus;
     }
 
     public boolean equal(int count) {

@@ -1,9 +1,7 @@
 package com.company;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.security.KeyException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -54,7 +52,7 @@ public class ParkingCollection {
         return null;
     }
 
-    public boolean saveData(String filename) {
+    public void saveData(String filename) throws IOException {
         if (!filename.contains(".txt")) {
             filename += ".txt";
         }
@@ -72,15 +70,12 @@ public class ParkingCollection {
                     fileWriter.write(transport.toString() + '\n');
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 
-    public boolean loadData(String filename) {
+    public void loadData(String filename) throws IOException, ParkingOverflowException {
         if (!(new File(filename).exists())) {
-            return false;
+            throw new FileNotFoundException("Файл " + filename + " не найден");
         }
 
         try (FileReader fileReader = new FileReader(filename)) {
@@ -88,7 +83,7 @@ public class ParkingCollection {
             if (scanner.nextLine().contains("ParkingCollection")) {
                 parkingStages.clear();
             } else {
-                return false;
+                throw new IllegalArgumentException("Неверный формат файла");
             }
 
             Transport bus = null;
@@ -107,26 +102,23 @@ public class ParkingCollection {
                         bus = new AccordionBus(line.split(separator)[1]);
                     }
                     if (!(parkingStages.get(key).add(bus))) {
-                        return false;
+                        throw new ParkingOverflowException();
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 
-    public boolean saveParking(String filename, String key) {
+    public void saveParking(String filename, String key) throws IOException, KeyException {
         if (!filename.contains(".txt")) {
             filename += ".txt";
         }
-        if (!parkingStages.containsKey(key)) {
-            return false;
-        }
         try (FileWriter fileWriter = new FileWriter(filename, false)) {
-            if (parkingStages.containsKey(key))
+            if (parkingStages.containsKey(key)) {
                 fileWriter.write("Parking" + separator + key + '\n');
+            } else {
+                throw new KeyException();
+            }
             Transport bus;
             for (int i = 0; (bus = parkingStages.get(key).get(i)) != null; i++) {
                 if (bus.getClass().getSimpleName().equals("BusVehicle")) {
@@ -136,13 +128,13 @@ public class ParkingCollection {
                 }
                 fileWriter.write(bus.toString() + '\n');
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 
-    public boolean loadParking(String filename) {
+    public void loadParking(String filename) throws IOException, ParkingOverflowException {
+        if (!(new File(filename).exists())) {
+            throw new FileNotFoundException("Файл " + filename + " не найден");
+        }
         try (FileReader fileReader = new FileReader(filename)) {
             Scanner scanner = new Scanner(fileReader);
             String key;
@@ -156,7 +148,7 @@ public class ParkingCollection {
                     parkingStages.put(key, new Parking<>(pictureWidth, pictureHeight));
                 }
             } else {
-                return false;
+                throw new IllegalArgumentException("Неверный формат файла");
             }
             Transport bus = null;
             while (scanner.hasNextLine()) {
@@ -168,13 +160,10 @@ public class ParkingCollection {
                         bus = new AccordionBus(line.split(separator)[1]);
                     }
                     if (!(parkingStages.get(key).add(bus))) {
-                        return false;
+                        throw new ParkingOverflowException();
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return true;
     }
 }
